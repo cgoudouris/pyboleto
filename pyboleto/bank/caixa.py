@@ -21,18 +21,19 @@ class BoletoCaixa(BoletoData):
         super(BoletoCaixa, self).__init__()
 
         self.codigo_banco = "104"
-        self.local_pagamento = "Preferencialmente nas Casas Lotéricas e \
-            Agências da Caixa"
+        self.local_pagamento = "Preferencialmente nas Casas Lotéricas e agências da Caixa"
         self.logo_image = "logo_bancocaixa.jpg"
+
+        self.conta_cedente = self.conta_cedente + '-' + str(self.modulo11(self.conta_cedente, 9, 1))
 
     @property
     def nosso_numero(self):
         if self.nosso_numero_cliente == None or self.emissao_cliente == None:
             raise ValueError("nosso_numero_cliente e emissao_cliente must be set")
-        if self.nosso_numero_cliente:
-            return self._nosso_numero
+        if not self.nosso_numero_cliente:
+            return ''.zfill(15)
         else:
-            return ('14' if self.emissao_cliente else '11') + self._nosso_numero
+            return ('14' if self.emissao_cliente else '11') + self.nosso_numero_cliente.zfill(15)
 
     @nosso_numero.setter
     def nosso_numero(self, n):
